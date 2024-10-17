@@ -1,3 +1,6 @@
+from Objetos.barco import Barco
+
+
 class Tablero():
 
     def __init__(self, tamaño, valores_horizontales, valores_verticales):
@@ -14,11 +17,13 @@ class Tablero():
             tablero.append(linea)
         return tablero
     
-    def insertar_barco_vertical(self, barco, posicion) -> bool:
+    def insertar_barco_vertical(self, barco: Barco, posicion) -> bool:
         (pos_v, pos_h) = (posicion[0], posicion[1])
         if self._el_barco_se_pasa_del_tablero(pos_v , barco):
             return False
         if self._hay_otro_barco_abajo(pos_v, pos_h, barco):
+            return False
+        if self._hay_otro_barco_arriba(pos_v, pos_h, barco):
             return False
         for i in range(pos_v, pos_v + barco.length()):
             if self._el_casillero_esta_vacio(i, pos_h):
@@ -46,12 +51,30 @@ class Tablero():
             return False
         return self.tablero[pos_v][pos_h + 1] != 0
     
-    def _el_barco_se_pasa_del_tablero(self, pos_v, barco) -> bool:
+    def _el_barco_se_pasa_del_tablero(self, pos_v: int, barco: Barco) -> bool:
         return pos_v + barco.length() > len(self.tablero)
 
-    def _hay_otro_barco_abajo(self, pos_v, pos_h, barco):
-        return pos_v + barco.length() < len(self.tablero) and self.tablero[pos_v + barco.length()][pos_h] != 0
+    def _hay_otro_barco_abajo(self, pos_v: int, pos_h: int, barco: Barco):
+        if pos_v + barco.length() >= len(self.tablero):
+            return False
+        if self.tablero[pos_v + barco.length()][pos_h] != 0:
+            return True
+        if pos_h + 1 < len(self.tablero) and self.tablero[pos_v + barco.length()][pos_h + 1] != 0:
+            return True
+        if pos_h - 1 > 0 and self.tablero[pos_v + barco.length()][pos_h - 1] != 0:
+            return True
+        return False
     
+    def _hay_otro_barco_arriba(self, pos_v: int, pos_h: int, barco: Barco):
+        if pos_v <= 0:
+            return False
+        if self.tablero[pos_v - 1][pos_h] != 0:
+            return True
+        if pos_h + 1  < len(self.tablero) and self.tablero[pos_v - 1][pos_h + 1] != 0:
+            return True
+        if pos_h - 1 > 0 and self.tablero[pos_v - 1][pos_h - 1] != 0:
+            return True
+        return False
     
     def comparar_tableros(self, tablero) -> bool:
         if len(tablero) != len(self.tablero):

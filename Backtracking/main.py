@@ -113,6 +113,41 @@ def test09():
     assert(tablero.comparar_tableros(tablero_esperado))
     print("TEST 09 PASO")
 
+def test10():
+    tablero: Tablero = Tablero(5,[2,2,2,2,2], [2,2,2,2,2])
+    barco1: Barco = Barco(3)
+    barco2: Barco = Barco(4)
+    tablero.insertar_barco_vertical(barco1, (0,1))
+    tablero.insertar_barco_vertical(barco2, (1,3))
+    tablero_esperado = [
+        [0,1,0,0,0],
+        [0,1,0,1,0],
+        [0,1,0,1,0],
+        [0,0,0,1,0],
+        [0,0,0,1,0],
+    ]
+    assert(tablero.comparar_tableros(tablero_esperado))
+    print("TEST 10 PASO")
+
+def test11():
+    tablero: Tablero = Tablero(6, [2,2,2,2,2,2], [2,2,2,2,2,2])
+    barco1: Barco = Barco(2)
+    barco2: Barco = Barco(2)
+    tablero.insertar_barco_vertical(barco1,(2,3))
+    assert(not tablero.insertar_barco_vertical(barco2,(0,2)))
+    assert(not tablero.insertar_barco_vertical(barco2, (0,4)))
+    assert(not tablero.insertar_barco_vertical(barco2, (4,2)))
+    assert(not tablero.insertar_barco_vertical(barco2, (4,4)))
+    tablero_esperado = [
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,1,0,0],
+        [0,0,0,1,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+    ]
+    assert(tablero.comparar_tableros(tablero_esperado))
+    print("TEST 11 PASO")
 
 def tests():
     test01()
@@ -123,7 +158,9 @@ def tests():
     test06()
     test07()
     test08()
-    #test09()
+    test09()
+    test10()
+    test11()
 
 def main():
     tests()
